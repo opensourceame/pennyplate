@@ -1,4 +1,6 @@
 = turbo_frame_tag 'recipes' do
-  p #{@recipes.count} recipes found which use one of the ingredients
-
-  = render @recipes
+  p
+    span #{@recipes.count} recipes found which use one of the ingredients.
+    - if @recipes.count > 20
+      span  This is a small sample of the recipes available.
+  = render @recipes.take(20)

@@ -27,10 +27,11 @@ TODO:
 * search doesn't handle case-sensitivity yet
 * add a simple feature that lets the users select common ingredients from a list without having to type them
 * add an checkbox option to the form to require all the ingredients in the search results
+* add pagination or endless scrolling to the search results
+* images don't work, need to strip out the reference to the CDN from the URLs
 
 NOTES:
 
-* images don't work, need to strip out the reference to the CDN
 * there's a bunch of boilerplate code that can be cleaned up
 * `rake db:seed` calls a rake task that can be reused for importing recipes, e.g. other languages (French)
 * I put a `DK:` in front of some things so it's easier to see what changes I made from default Rails
