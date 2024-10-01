@@ -7,14 +7,14 @@
 default: &default
   adapter: postgresql
   encoding: unicode
-  username: postgres
-  password: postgres
-  host: localhost
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
   timeout: 5000
 
 development:
   <<: *default
+  username: postgres
+  password: postgres
+  host: localhost
   database: pennyplate_development
 
 # Warning: The database defined as "test" will be erased and
@@ -26,4 +26,4 @@ test:
 
 production:
   <<: *default
-  database: pennyplate_production
+  url: <%= ENV['DATABASE_URL'] %>
