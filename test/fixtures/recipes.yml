@@ -1,0 +1,30 @@
+# == Schema Information
+#
+# Table name: recipes
+#
+#  id         :bigint           not null, primary key
+#  title      :string
+#  cook_time  :integer
+#  prep_time  :integer
+#  image      :string
+#  author     :string
+#  ratings    :float
+#  created_at :datetime         not null
+#  updated_at :datetime         not null
+#
+
+one:
+  title: MyString
+  cook_time: 1
+  prep_time: 1
+  image: MyString
+  author: MyString
+  ratings: 1.5
+
+two:
+  title: MyString
+  cook_time: 1
+  prep_time: 1
+  image: MyString
+  author: MyString
+  ratings: 1.5

@@ -1,0 +1,23 @@
+doctype html
+head
+    title PennyPlate
+
+    = csp_meta_tag
+    = csrf_meta_tags
+
+    = stylesheet_link_tag "application", media: "all"
+
+    = javascript_importmap_tags
+    = javascript_include_tag "application"
+
+    css:
+        #site-header {
+            text-align: center;
+            padding: 20px;
+            background-color: #f0f0f0;
+            color: #333;
+        }
+body
+    #site-header PennyPlate
+
+    = yield

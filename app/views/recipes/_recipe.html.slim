@@ -1,0 +1,8 @@
+div
+  h3 = recipe.title
+  h5 = recipe.author
+  = image_tag recipe.image_url, class: 'img-fluid'
+
+  ul
+    - recipe.ingredients.each do |ingredient|
+      li = ingredient.name

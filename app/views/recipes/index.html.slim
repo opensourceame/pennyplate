@@ -1,0 +1,8 @@
+h1 Recipes
+
+= form_with url: search_recipes_path, method: :get, remote: true, data: { turbo_frame: 'recipes' } do
+  = text_field_tag :search, params[:search]
+  = submit_tag "Search"
+
+= turbo_frame_tag 'recipes' do
+  = render @recipes
