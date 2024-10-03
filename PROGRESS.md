@@ -21,12 +21,13 @@
 * rename recipe.image to recipe.image_url
 * add some tests
 * add some styling
+* search handles case-sensitivity yet
+* add an checkbox option to the form to require all the ingredients in the search results
+* add a simple feature that lets the users select common ingredients from a list without having to type them
 
 TODO:
 
-* search doesn't handle case-sensitivity yet
-* add a simple feature that lets the users select common ingredients from a list without having to type them
-* add an checkbox option to the form to require all the ingredients in the search results
+* prevent duplicate ingredients in the search bar
 * add pagination or endless scrolling to the search results
 * images don't work, need to strip out the reference to the CDN from the URLs
 

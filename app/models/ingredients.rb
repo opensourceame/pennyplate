@@ -12,4 +12,6 @@
 #
 class Ingredients < ApplicationRecord
   belongs_to :recipe
+
+  COMMON_INGREDIENTS = YAML.load_file(Rails.root.join('config/common_ingredients.yml'))
 end

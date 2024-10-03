@@ -18,11 +18,11 @@ class Recipe < ApplicationRecord
   has_many :ingredients, dependent: :destroy, class_name: 'Ingredients'
 
   scope :with_ingredients, ->(term) {
-    joins(:ingredients).where('ingredients.name LIKE ?', "%#{term}%")
+    joins(:ingredients).where('ingredients.name ILIKE ?', "%#{term}%")
   }
 
   def self.search(term)
-    Recipe.where('title LIKE ?', "%#{term}%") + Recipe.with_ingredients(term)
+    Recipe.where('title ILIKE ?', "%#{term}%") + Recipe.with_ingredients(term)
   end
 
   def self.create_from_json!(recipe_json)

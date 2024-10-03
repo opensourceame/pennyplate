@@ -4,7 +4,11 @@ class RecipesController < ApplicationController
   # GET /recipes or /recipes.json
   def index
     # show some recipes on load
-    @recipes = Recipe.all.limit(10)
+    if params[:search].blank?
+      @recipes = Recipe.all.limit(10)
+    else
+      search_recipes
+    end
   end
 
   def search
@@ -65,22 +69,37 @@ class RecipesController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_recipe
-      @recipe = Recipe.find(params[:id])
+
+  # Use callbacks to share common setup or constraints between actions.
+  def set_recipe
+    @recipe = Recipe.find(params[:id])
+  end
+
+  # Only allow a list of trusted parameters through.
+  def recipe_params
+    params.require(:recipe).permit(:title, :cook_time, :prep_time, :image, :author, :ratings)
+  end
+
+  def search_recipes
+    terms   = params[:search].split
+    recipes = []
+
+    terms.each do |term|
+      # TODO: make a model function that handles multiple terms instead of doing it here
+      recipes << Recipe.search(term)
     end
 
-    # Only allow a list of trusted parameters through.
-    def recipe_params
-      params.require(:recipe).permit(:title, :cook_time, :prep_time, :image, :author, :ratings)
+    return @recipes = recipes.flatten! if !params[:use_all_ingredients]
+    return @recipes = recipes.first if recipes.length == 1
+
+    # find the intersection of recipes that have all the ingredients
+    # TODO: make this more efficient
+    m = recipes.first.map(&:id)
+
+    recipes[1..].each do |recipe|
+      m = m & recipe.map(&:id)
     end
 
-    def search_recipes
-      terms = params[:search].split
-      @recipes = terms.map do |term|
-        # TODO: handle case-sensitivity
-        # TODO: make a model function that handles multiple terms instead of doing it here
-        Recipe.search(term)
-      end.flatten
-    end
+    @recipes = Recipe.where(id: m)
+  end
 end
