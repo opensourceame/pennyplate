@@ -10,14 +10,7 @@ head
     = javascript_importmap_tags
     = javascript_include_tag "application"
 
-    css:
-        #site-header {
-            text-align: center;
-            padding: 20px;
-            background-color: #f0f0f0;
-            color: #333;
-        }
 body
-    #site-header PennyPlate
+    #site-header onclick='window.location.href="/"' PennyPlate
 
     = yield

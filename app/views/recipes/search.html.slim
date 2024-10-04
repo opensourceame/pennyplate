@@ -1,6 +1,11 @@
 = turbo_frame_tag 'recipes' do
-  p
-    span #{@recipes.count} recipes found which use one of the ingredients.
+  p style='margin-top: 1em; margin-bottom: 1em; font-family: sans-serif; color: darkgreen;'
+    span #{@recipes.count} recipes found
+    - if params[:use_all_ingredients]
+      span  which use all of the ingredients.
+    - else
+      span  which use one of the ingredients.
+
     - if @recipes.count > 20
       span  This is a small sample of the recipes available.
   = render @recipes.take(20)

@@ -4,7 +4,11 @@ class RecipesController < ApplicationController
   # GET /recipes or /recipes.json
   def index
     # show some recipes on load
-    @recipes = Recipe.all.limit(10)
+    if params[:search].blank?
+      @recipes = Recipe.all.limit(10)
+    else
+      search_recipes
+    end
   end
 
   def search
@@ -65,22 +69,32 @@ class RecipesController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_recipe
-      @recipe = Recipe.find(params[:id])
-    end
 
-    # Only allow a list of trusted parameters through.
-    def recipe_params
-      params.require(:recipe).permit(:title, :cook_time, :prep_time, :image, :author, :ratings)
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_recipe
+    @recipe = Recipe.find(params[:id])
+  end
 
-    def search_recipes
-      terms = params[:search].split
-      @recipes = terms.map do |term|
-        # TODO: handle case-sensitivity
-        # TODO: make a model function that handles multiple terms instead of doing it here
-        Recipe.search(term)
-      end.flatten
+  # Only allow a list of trusted parameters through.
+  def recipe_params
+    params.require(:recipe).permit(:title, :cook_time, :prep_time, :image, :author, :ratings)
+  end
+
+  def search_recipes
+    @search_terms  = params[:search].split
+
+    @recipes = if (@search_terms.length == 1)
+                 Recipe.search(@search_terms.first)
+               else
+                 search_multiple_terms
+               end
+  end
+
+  def search_multiple_terms
+    if params[:use_all_ingredients]
+      Recipe.search_including_all_terms(@search_terms)
+    else
+      Recipe.search_including_any_terms(@search_terms)
     end
+  end
 end
