@@ -1,4 +1,6 @@
 div.recipe
+  div style='float: right'
+    = image_tag recipe.sanitized_image_url, style: 'height: 150px; width: 150px;'
   h3 = recipe.title
   h5 = recipe.author
   / = image_tag recipe.image_url, class: 'img-fluid'
@@ -7,6 +9,6 @@ div.recipe
     - recipe.ingredients.each do |ingredient|
       tr
         td = ingredient.name
-        - if params[:use_all_ingredients].blank?
+        - if @search_terms && !ingredient.matches?(@search_terms)
           td style='text-align: right;'
             button + shopping list

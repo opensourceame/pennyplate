@@ -81,25 +81,20 @@ class RecipesController < ApplicationController
   end
 
   def search_recipes
-    terms   = params[:search].split
-    recipes = []
+    @search_terms  = params[:search].split
 
-    terms.each do |term|
-      # TODO: make a model function that handles multiple terms instead of doing it here
-      recipes << Recipe.search(term)
+    @recipes = if (@search_terms.length == 1)
+                 Recipe.search(@search_terms.first)
+               else
+                 search_multiple_terms
+               end
+  end
+
+  def search_multiple_terms
+    if params[:use_all_ingredients]
+      Recipe.search_including_all_terms(@search_terms)
+    else
+      Recipe.search_including_any_terms(@search_terms)
     end
-
-    return @recipes = recipes.flatten! if !params[:use_all_ingredients]
-    return @recipes = recipes.first if recipes.length == 1
-
-    # find the intersection of recipes that have all the ingredients
-    # TODO: make this more efficient
-    m = recipes.first.map(&:id)
-
-    recipes[1..].each do |recipe|
-      m = m & recipe.map(&:id)
-    end
-
-    @recipes = Recipe.where(id: m)
   end
 end

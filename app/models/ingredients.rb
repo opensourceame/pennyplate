@@ -14,4 +14,10 @@ class Ingredients < ApplicationRecord
   belongs_to :recipe
 
   COMMON_INGREDIENTS = YAML.load_file(Rails.root.join('config/common_ingredients.yml'))
+
+  def matches?(search_terms)
+    search_terms.any? do |term|
+      return true if name.include?(term)
+    end
+  end
 end
