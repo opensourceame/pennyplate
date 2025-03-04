@@ -1,8 +1,14 @@
-div
+div.recipe
+  div style='float: right'
+    = image_tag recipe.sanitized_image_url, style: 'height: 150px; width: 150px;'
   h3 = recipe.title
   h5 = recipe.author
-  = image_tag recipe.image_url, class: 'img-fluid'
+  / = image_tag recipe.image_url, class: 'img-fluid'
 
-  ul
+  table style='width: 100%;'
     - recipe.ingredients.each do |ingredient|
-      li = ingredient.name
+      tr
+        td = ingredient.name
+        - if @search_terms && !ingredient.matches?(@search_terms)
+          td style='text-align: right;'
+            button + shopping list

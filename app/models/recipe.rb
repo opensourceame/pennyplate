@@ -18,11 +18,28 @@ class Recipe < ApplicationRecord
   has_many :ingredients, dependent: :destroy, class_name: 'Ingredients'
 
   scope :with_ingredients, ->(term) {
-    joins(:ingredients).where('ingredients.name LIKE ?', "%#{term}%")
+    joins(:ingredients).where('ingredients.name ILIKE ?', "%#{term}%")
   }
 
   def self.search(term)
-    Recipe.where('title LIKE ?', "%#{term}%") + Recipe.with_ingredients(term)
+    Recipe.includes(:ingredients).where('title ILIKE ?', "%#{term}%") + Recipe.with_ingredients(term)
+  end
+
+  def self.search_including_any_terms(terms)
+    terms.map do |term|
+      Recipe.with_ingredients(term)
+    end.flatten
+  end
+
+  def self.search_including_all_terms(terms)
+    results = Recipe.joins(:ingredients).distinct
+
+    terms.each do |term|
+      ids = Recipe.with_ingredients(term).pluck(:id)
+      results = results.where(id: ids)
+    end
+
+    results
   end
 
   def self.create_from_json!(recipe_json)
@@ -40,5 +57,9 @@ class Recipe < ApplicationRecord
     end
 
     recipe
+  end
+
+  def sanitized_image_url
+    URI.decode_uri_component(image_url.split('=').last)
   end
 end

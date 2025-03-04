@@ -1,8 +1,55 @@
+css:
+  #common-ingredients {
+    float: right;
+    margin-right: 5em;
+  }
+
+  #common-ingredients td {
+    padding: 0.5em;
+  }
+
+  #common-ingredients tr:hover {
+    background-color: #f0f0ff;
+  }
+
+  #common-ingredients a {
+    margin-left: 1em;
+    background-color: #f0f0f0;
+    padding: 0.5em;
+    border-radius: 0.5em;
+    text-decoration: none;
+    font-size: 0.8em;
+  }
+
+  .recipe {
+    margin-bottom: 2em;
+    border: 1px solid #f0f0f0;
+    padding: 1em;
+    border-radius: 0.5em;
+    width: 50%;
+    background-color: #eee;
+  }
+
+#common-ingredients
+  h2 Common Ingredients
+  table
+    - Ingredients::COMMON_INGREDIENTS.each do |ingredient|
+      tr
+      td = ingredient
+      td = link_to 'View Recipes', recipes_path(search: ingredient)
+      td = link_to 'Add to search', recipes_path(search: "#{params[:search]} #{ingredient}")
+
 h1 Recipes
 
 = form_with url: search_recipes_path, method: :get, remote: true, data: { turbo_frame: 'recipes' } do
+  = check_box_tag :use_all_ingredients, true, params[:use_all_ingredients]
+  = label_tag :use_all_ingredients, 'Use all ingredients'
+  span &nbsp;
   = text_field_tag :search, params[:search]
   = submit_tag "Search"
 
 = turbo_frame_tag 'recipes' do
+  - if params[:search].blank?
+    h2 style='color: darkgreen;' Today's Top Picks
+
   = render @recipes
